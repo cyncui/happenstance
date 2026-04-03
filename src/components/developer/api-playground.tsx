@@ -84,7 +84,7 @@ function SyntaxLine({ text, type }: { text: string; type: "bash" | "json" | "ter
       return (
         <span>
           <span className="text-brand-green">$ </span>
-          <span className="text-brand-text">{text.slice(2)}</span>
+          <span className="text-white">{text.slice(2)}</span>
         </span>
       );
     }
@@ -357,7 +357,7 @@ function CliTab({ active }: { active: boolean }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px]">
-      <div className="p-5 bg-[#0A0A0A] rounded-bl-xl">
+      <div className="p-5 bg-[#0D0D0D] rounded-bl-xl">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs font-mono text-brand-muted uppercase tracking-wider">Terminal</span>
         </div>
@@ -420,13 +420,13 @@ function McpTab({ active }: { active: boolean }) {
   }, [active]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px]">
-      <div className="p-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px] overflow-hidden">
+      <div className="p-5 overflow-hidden">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs font-mono text-brand-muted uppercase tracking-wider">Config</span>
-          <span className="text-xs font-mono text-brand-muted">claude_desktop_config.json</span>
+          <span className="text-xs font-mono text-brand-muted truncate">claude_desktop_config.json</span>
         </div>
-        <pre className="text-sm font-mono leading-relaxed">
+        <pre className="text-sm font-mono leading-relaxed whitespace-pre-wrap break-words">
           {MCP_CONFIG.split("\n").map((line, i) => (
             <div key={i}>
               <SyntaxLine text={line} type="json" />
@@ -489,8 +489,15 @@ function McpTab({ active }: { active: boolean }) {
   );
 }
 
-export function ApiPlayground() {
-  const [activeTab, setActiveTab] = useState<Tab>("search");
+export function ApiPlayground({
+  activeTab: controlledTab,
+  onTabChange,
+}: {
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+}) {
+  const [internalTab, setInternalTab] = useState<Tab>("search");
+  const activeTab = (controlledTab as Tab) ?? internalTab;
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [isActive, setIsActive] = useState(false);
@@ -500,7 +507,8 @@ export function ApiPlayground() {
   }, [isInView]);
 
   const handleTabClick = (tab: Tab) => {
-    setActiveTab(tab);
+    setInternalTab(tab);
+    onTabChange?.(tab);
   };
 
   return (

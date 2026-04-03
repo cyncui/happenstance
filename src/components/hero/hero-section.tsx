@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { CtaButton } from "@/components/shared/cta-button";
+import { IconUserOutline24, IconCloverOutline24 } from "nucleo-core-outline-24";
 
 export function HeroSection() {
   return (
@@ -149,7 +150,7 @@ function NetworkGraphHero() {
             cy={node.y}
             r={node.isYou ? 28 : node.color ? 22 : 24}
             fill={node.isYou ? "var(--brand-green)" : "var(--brand-bg-card)"}
-            opacity={node.isYou ? 0.2 : 1}
+            opacity={1}
             stroke={node.isYou ? "var(--brand-green)" : node.color || "var(--brand-border)"}
             strokeWidth={1}
           />
@@ -159,10 +160,14 @@ function NetworkGraphHero() {
           )}
 
           {node.isYou && (
-            <text x={node.x} y={node.y + 1} textAnchor="middle" dominantBaseline="central" fill="var(--brand-green)" fontSize={18} fontFamily="system-ui">☘</text>
+            <foreignObject x={node.x - 9} y={node.y - 9} width={18} height={18}>
+              <IconCloverOutline24 size={18} className="text-white" />
+            </foreignObject>
           )}
           {!node.isYou && !node.color && (
-            <text x={node.x} y={node.y + 1} textAnchor="middle" dominantBaseline="central" fill="var(--brand-muted)" fontSize={14} fontFamily="system-ui">👤</text>
+            <foreignObject x={node.x - 7} y={node.y - 7} width={14} height={14}>
+              <IconUserOutline24 size={14} className="text-brand-muted" />
+            </foreignObject>
           )}
           {node.color && (
             <text x={node.x} y={node.y + 1} textAnchor="middle" dominantBaseline="central" fill={node.color} fontSize={10} fontWeight={700} fontFamily="system-ui">{node.letter}</text>

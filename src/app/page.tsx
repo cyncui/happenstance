@@ -5,6 +5,7 @@ import { FeatureShowcase } from "@/components/features/feature-showcase";
 import { GroupsSection } from "@/components/groups/groups-section";
 import { DeveloperSection } from "@/components/developer/developer-section";
 import { UseCasesGrid } from "@/components/use-cases/use-cases-grid";
+import { IntegrationsSection } from "@/components/integrations/integrations-section";
 import { FaqSection } from "@/components/faq/faq-section";
 import { FinalCta } from "@/components/cta/final-cta";
 import { GridSection, GridEnd } from "@/components/layout/grid-lines";
@@ -75,6 +76,10 @@ export default function Home() {
             title="Waymo"
             image="https://media.licdn.com/dms/image/v2/D5603AQErZ0EmBAH6mg/profile-displayphoto-crop_800_800/B56Z1Dp5WuGwAI-/0/1774956550870?e=1776902400&v=beta&t=TzoK70TCuCFTyaFb_mfA3qVzyScfORtQ2OOH265qLuc"
           />
+        </GridSection>
+
+        <GridSection>
+          <IntegrationsSection />
         </GridSection>
 
         <GridSection>
