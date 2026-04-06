@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 export function useTypingAnimation(
   text: string,
@@ -9,11 +9,6 @@ export function useTypingAnimation(
 ) {
   const [displayText, setDisplayText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
-
-  const reset = useCallback(() => {
-    setDisplayText("");
-    setIsComplete(false);
-  }, []);
 
   useEffect(() => {
     if (!enabled) return;
@@ -34,5 +29,5 @@ export function useTypingAnimation(
     return () => clearInterval(timer);
   }, [text, enabled, speed]);
 
-  return { displayText, isComplete, reset };
+  return { displayText, isComplete };
 }

@@ -23,7 +23,7 @@ export function ThemeSwitcher() {
         <button
           key={mode.value}
           onClick={() => setTheme(mode.value)}
-          className="relative rounded-full p-2.5 text-brand-muted hover:text-brand-text"
+          className="relative rounded-full p-3 text-brand-muted hover:text-brand-text"
           style={{ transitionProperty: "color", transitionDuration: "150ms" }}
           title={mode.label}
         >

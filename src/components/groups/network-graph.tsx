@@ -107,18 +107,18 @@ export function NetworkGraph() {
             initial={{ pathLength: 0, opacity: 0 }}
             animate={
               isInView
-                ? { pathLength: 1, opacity: highlighted ? 0.8 : discovered ? 0.6 : 0.2 }
+                ? { pathLength: 1, opacity: highlighted ? 0.8 : discovered ? 0.6 : 0 }
                 : { pathLength: 0, opacity: 0 }
             }
             transition={{
               pathLength: { delay: 1.2 + i * 0.04, duration: 0.4, ease: "easeOut" },
-              opacity: { delay: 1.2 + i * 0.04, duration: 0.3 },
+              opacity: { duration: 0.2 },
             }}
             x1={from.x}
             y1={from.y}
             x2={to.x}
             y2={to.y}
-            stroke={highlighted || discovered ? "var(--brand-green)" : "var(--brand-border)"}
+            stroke={highlighted || discovered ? "var(--brand-green)" : "var(--brand-muted)"}
             strokeWidth={highlighted ? 2 : 1}
           />
         );
@@ -222,26 +222,34 @@ export function NetworkGraph() {
             {/* Tooltip */}
             {isHovered && (
               <g>
-                <rect
-                  x={node.x - 50}
-                  y={node.y - r - 32}
-                  width={100}
-                  height={24}
-                  rx={6}
-                  fill="var(--brand-bg-card)"
-                  stroke="var(--brand-border)"
-                  strokeWidth={1}
-                />
-                <text
-                  x={node.x}
-                  y={node.y - r - 17}
-                  textAnchor="middle"
-                  fill="var(--brand-muted)"
-                  fontSize={9}
-                  fontFamily="system-ui, sans-serif"
-                >
-                  {node.isTeam ? "Team member" : "12 shared connections"}
-                </text>
+                {(() => {
+                  const label = node.isTeam ? "Team member" : "12 shared connections";
+                  const pillWidth = node.isTeam ? 90 : 136;
+                  return (
+                    <>
+                      <rect
+                        x={node.x - pillWidth / 2}
+                        y={node.y - r - 32}
+                        width={pillWidth}
+                        height={24}
+                        rx={6}
+                        fill="var(--brand-bg-card)"
+                        stroke="var(--brand-border)"
+                        strokeWidth={1}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y - r - 17}
+                        textAnchor="middle"
+                        fill="var(--brand-muted)"
+                        fontSize={9}
+                        fontFamily="system-ui, sans-serif"
+                      >
+                        {label}
+                      </text>
+                    </>
+                  );
+                })()}
               </g>
             )}
           </motion.g>

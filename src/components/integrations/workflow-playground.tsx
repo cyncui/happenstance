@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useTypingAnimation } from "@/hooks/use-typing-animation";
+import { WindowChrome } from "@/components/shared/window-chrome";
 
 /* ── Data ─────────────────────────────────────────────── */
 
@@ -24,24 +25,6 @@ const EMAIL_RESULTS = [
   { name: "Elena Kovacs", title: "GP @ Ribbit Capital", mutual: "Sarah Kim", score: 0.93 },
   { name: "James Wu", title: "Principal @ QED Investors", mutual: "Mark Chen", score: 0.89 },
 ];
-
-/* ── Window chrome ────────────────────────────────────── */
-
-function WindowChrome({ title, muted }: { title: React.ReactNode; muted?: boolean }) {
-  return (
-    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-brand-border">
-      <div className="flex gap-1.5">
-        <div className={`w-2.5 h-2.5 rounded-full ${muted ? "bg-brand-border" : "bg-[#FF5F57]"}`} />
-        <div className={`w-2.5 h-2.5 rounded-full ${muted ? "bg-brand-border" : "bg-[#FEBC2E]"}`} />
-        <div className={`w-2.5 h-2.5 rounded-full ${muted ? "bg-brand-border" : "bg-[#28C840]"}`} />
-      </div>
-      <div className="flex-1 text-center text-xs text-brand-muted font-medium truncate">
-        {title}
-      </div>
-      <div className="w-[52px]" />
-    </div>
-  );
-}
 
 /* ── Slack window ─────────────────────────────────────── */
 
@@ -65,7 +48,7 @@ function SlackWindow({ active }: { active: boolean }) {
   }, [isComplete]);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full overflow-hidden">
       {/* Sidebar */}
       <div className="hidden md:flex w-[180px] shrink-0 flex-col border-r border-brand-border bg-brand-bg/50 p-3 gap-4">
         <div className="flex items-center gap-2 px-1">
@@ -211,7 +194,7 @@ function EmailWindow({ active }: { active: boolean }) {
   }, [isComplete, active]);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full overflow-hidden">
       {/* Sidebar */}
       <div className="hidden md:flex w-[160px] shrink-0 flex-col border-r border-brand-border bg-brand-bg/50 p-3 gap-1">
         <div className="rounded px-2 py-1.5 text-xs text-brand-muted flex items-center gap-2">
@@ -326,7 +309,7 @@ function EmailWindow({ active }: { active: boolean }) {
                           className="h-full rounded-full bg-brand-green"
                         />
                       </div>
-                      <span className="text-[9px] font-mono text-brand-green">{result.score}</span>
+                      <span className="text-[9px] font-mono text-brand-green" style={{ fontVariantNumeric: "tabular-nums" }}>{result.score}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -340,6 +323,28 @@ function EmailWindow({ active }: { active: boolean }) {
 }
 
 /* ── Playground container ─────────────────────────────── */
+
+const SLACK_TITLE = (
+  <span className="flex items-center justify-center gap-1.5">
+    <svg width="14" height="14" viewBox="0 0 40 40" fill="none" className="shrink-0">
+      <path d="M9.29 24.45a3.57 3.57 0 1 1-3.57-3.57h3.57v3.57Zm1.79 0a3.57 3.57 0 1 1 7.14 0v8.93a3.57 3.57 0 1 1-7.14 0v-8.93Z" fill="#E01E5A" />
+      <path d="M14.65 9.29a3.57 3.57 0 1 1 3.57-3.57v3.57h-3.57Zm0 1.79a3.57 3.57 0 1 1 0 7.14H5.72a3.57 3.57 0 1 1 0-7.14h8.93Z" fill="#36C5F0" />
+      <path d="M29.81 14.65a3.57 3.57 0 1 1 3.57 3.57h-3.57v-3.57Zm-1.79 0a3.57 3.57 0 1 1-7.14 0V5.72a3.57 3.57 0 1 1 7.14 0v8.93Z" fill="#2EB67D" />
+      <path d="M24.45 29.81a3.57 3.57 0 1 1-3.57 3.57v-3.57h3.57Zm0-1.79a3.57 3.57 0 1 1 0-7.14h8.93a3.57 3.57 0 1 1 0 7.14h-8.93Z" fill="#ECB22E" />
+    </svg>
+    Slack
+  </span>
+);
+
+const EMAIL_TITLE = (
+  <span className="flex items-center justify-center gap-1.5">
+    <svg width="14" height="14" viewBox="0 0 40 40" fill="none" className="shrink-0">
+      <rect x="4" y="8" width="32" height="24" rx="4" fill="#3B82F6" />
+      <path d="M4 14l16 10 16-10" stroke="#fff" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
+    </svg>
+    Email Agent
+  </span>
+);
 
 export function WorkflowPlayground() {
   const [focused, setFocused] = useState<"slack" | "email">("slack");
@@ -357,73 +362,89 @@ export function WorkflowPlayground() {
         initial={{ opacity: 0, y: 24 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
-        className="relative h-[420px] md:h-[400px]"
       >
-        {/* Slack window */}
-        <motion.div
-          onClick={() => setFocused("slack")}
-          animate={{
-            zIndex: focused === "slack" ? 20 : 10,
-            scale: focused === "slack" ? 1 : 0.97,
-            x: focused === "slack" ? 0 : -8,
-            y: focused === "slack" ? 0 : 8,
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="absolute top-0 left-0 w-[calc(100%-40px)] md:w-[62%] h-full rounded-2xl bg-brand-bg-card overflow-hidden cursor-pointer"
-          style={{
-            boxShadow: focused === "slack"
-              ? "0 0 0 1px var(--brand-border), 0 8px 32px rgba(0,0,0,0.3)"
-              : "0 0 0 1px var(--brand-border), 0 2px 8px rgba(0,0,0,0.15)",
-          }}
-        >
-          <WindowChrome
-            muted={focused !== "slack"}
-            title={
-              <span className="flex items-center justify-center gap-1.5">
-                <svg width="14" height="14" viewBox="0 0 40 40" fill="none" className="shrink-0">
-                  <path d="M9.29 24.45a3.57 3.57 0 1 1-3.57-3.57h3.57v3.57Zm1.79 0a3.57 3.57 0 1 1 7.14 0v8.93a3.57 3.57 0 1 1-7.14 0v-8.93Z" fill="#E01E5A" />
-                  <path d="M14.65 9.29a3.57 3.57 0 1 1 3.57-3.57v3.57h-3.57Zm0 1.79a3.57 3.57 0 1 1 0 7.14H5.72a3.57 3.57 0 1 1 0-7.14h8.93Z" fill="#36C5F0" />
-                  <path d="M29.81 14.65a3.57 3.57 0 1 1 3.57 3.57h-3.57v-3.57Zm-1.79 0a3.57 3.57 0 1 1-7.14 0V5.72a3.57 3.57 0 1 1 7.14 0v8.93Z" fill="#2EB67D" />
-                  <path d="M24.45 29.81a3.57 3.57 0 1 1-3.57 3.57v-3.57h3.57Zm0-1.79a3.57 3.57 0 1 1 0-7.14h8.93a3.57 3.57 0 1 1 0 7.14h-8.93Z" fill="#ECB22E" />
-                </svg>
-                Slack
-              </span>
-            }
-          />
-          <SlackWindow active={isActive && focused === "slack"} />
-        </motion.div>
+        {/* Mobile: tab switcher + single window */}
+        <div className="md:hidden">
+          <div className="flex gap-2 mb-3">
+            {(["slack", "email"] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setFocused(tab)}
+                className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors ${
+                  focused === tab
+                    ? "bg-brand-bg-card text-brand-text shadow-[0_0_0_1px_var(--brand-border)]"
+                    : "text-brand-muted"
+                }`}
+              >
+                {tab === "slack" ? SLACK_TITLE : EMAIL_TITLE}
+              </button>
+            ))}
+          </div>
+          <div className="rounded-2xl bg-brand-bg-card overflow-hidden shadow-[0_0_0_1px_var(--brand-border),0_2px_8px_rgba(0,0,0,0.08)] h-[400px]">
+            <WindowChrome title={focused === "slack" ? SLACK_TITLE : EMAIL_TITLE} />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={focused}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="h-[calc(100%-37px)]"
+              >
+                {focused === "slack" ? (
+                  <SlackWindow active={isActive && focused === "slack"} />
+                ) : (
+                  <EmailWindow active={isActive && focused === "email"} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
 
-        {/* Email window */}
-        <motion.div
-          onClick={() => setFocused("email")}
-          animate={{
-            zIndex: focused === "email" ? 20 : 10,
-            scale: focused === "email" ? 1 : 0.97,
-            x: focused === "email" ? 0 : 8,
-            y: focused === "email" ? 0 : 8,
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="absolute top-0 right-0 w-[calc(100%-40px)] md:w-[62%] h-full rounded-2xl bg-brand-bg-card overflow-hidden cursor-pointer"
-          style={{
-            boxShadow: focused === "email"
-              ? "0 0 0 1px var(--brand-border), 0 8px 32px rgba(0,0,0,0.3)"
-              : "0 0 0 1px var(--brand-border), 0 2px 8px rgba(0,0,0,0.15)",
-          }}
-        >
-          <WindowChrome
-            muted={focused !== "email"}
-            title={
-              <span className="flex items-center justify-center gap-1.5">
-                <svg width="14" height="14" viewBox="0 0 40 40" fill="none" className="shrink-0">
-                  <rect x="4" y="8" width="32" height="24" rx="4" fill="#3B82F6" />
-                  <path d="M4 14l16 10 16-10" stroke="#fff" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
-                </svg>
-                Email Agent
-              </span>
-            }
-          />
-          <EmailWindow active={isActive && focused === "email"} />
-        </motion.div>
+        {/* Desktop: overlapping windows */}
+        <div className="hidden md:block relative h-[400px]">
+          {/* Slack window */}
+          <motion.div
+            onClick={() => setFocused("slack")}
+            animate={{
+              zIndex: focused === "slack" ? 20 : 10,
+              scale: focused === "slack" ? 1 : 0.97,
+              x: focused === "slack" ? 0 : -8,
+              y: focused === "slack" ? 0 : 8,
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="absolute top-0 left-0 w-[62%] h-full rounded-2xl bg-brand-bg-card overflow-hidden cursor-pointer"
+            style={{
+              boxShadow: focused === "slack"
+                ? "0 0 0 1px var(--brand-border), 0 8px 32px rgba(0,0,0,0.3)"
+                : "0 0 0 1px var(--brand-border), 0 2px 8px rgba(0,0,0,0.15)",
+            }}
+          >
+            <WindowChrome muted={focused !== "slack"} title={SLACK_TITLE} />
+            <SlackWindow active={isActive && focused === "slack"} />
+          </motion.div>
+
+          {/* Email window */}
+          <motion.div
+            onClick={() => setFocused("email")}
+            animate={{
+              zIndex: focused === "email" ? 20 : 10,
+              scale: focused === "email" ? 1 : 0.97,
+              x: focused === "email" ? 0 : 8,
+              y: focused === "email" ? 0 : 8,
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="absolute top-0 right-0 w-[62%] h-full rounded-2xl bg-brand-bg-card overflow-hidden cursor-pointer"
+            style={{
+              boxShadow: focused === "email"
+                ? "0 0 0 1px var(--brand-border), 0 8px 32px rgba(0,0,0,0.3)"
+                : "0 0 0 1px var(--brand-border), 0 2px 8px rgba(0,0,0,0.15)",
+            }}
+          >
+            <WindowChrome muted={focused !== "email"} title={EMAIL_TITLE} />
+            <EmailWindow active={isActive && focused === "email"} />
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );

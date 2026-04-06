@@ -24,7 +24,7 @@ export function SectionWrapper({
       variants={staggerContainer}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className={cn("px-8 md:px-12 py-24 md:py-32", className)}
+      className={cn("px-5 sm:px-8 md:px-12 py-16 sm:py-24 md:py-32", className)}
     >
       {children}
     </motion.section>

@@ -31,7 +31,7 @@ export function SocialProofBar() {
         {LOGOS.map((logo) => (
           <div
             key={logo.name}
-            className="flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-brand-bg-card/50 border border-brand-border/30 text-brand-muted/50 hover:text-brand-muted/80 transition-colors whitespace-nowrap"
+            className="flex items-center gap-1.5 min-h-[40px] px-3.5 rounded-lg bg-brand-bg-card/50 border border-brand-border/30 text-brand-muted/50 hover:text-brand-muted/80 transition-colors whitespace-nowrap"
           >
             {logo.hasIcon && (
               <span className="inline-flex items-center justify-center w-4 h-4 rounded-[3px] bg-current text-[9px] font-bold leading-none">

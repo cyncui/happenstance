@@ -19,7 +19,7 @@ export function HeroSection() {
           <motion.div variants={fadeUp} className="mb-6">
             <a
               href="#developers"
-              className="inline-flex items-center gap-1.5 rounded-full border border-brand-border px-3 py-1 text-xs font-mono uppercase tracking-wider text-brand-muted hover:text-brand-text hover:border-brand-green/30 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full border border-brand-border px-3 py-2 text-xs font-mono uppercase tracking-wider text-brand-muted hover:text-brand-text hover:border-brand-green/30 transition-colors"
             >
               <span className="text-brand-green">&lt;/&gt;</span> Try our API &rsaquo;
             </a>
@@ -110,7 +110,7 @@ function NetworkGraphHero() {
               strokeWidth={2}
               filter="url(#glow)"
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.15 }}
+              animate={{ pathLength: 1, opacity: 0.4 }}
               transition={{ delay: 0.8 + i * 0.12, duration: 0.8, ease: "easeOut" }}
             />
             <motion.line

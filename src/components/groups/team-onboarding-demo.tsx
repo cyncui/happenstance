@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Check, Loader2 } from "lucide-react";
+import { WindowChrome } from "@/components/shared/window-chrome";
 
 const TEAM_MEMBERS = [
   { name: "Sarah Chen", role: "Engineering", initials: "SC", color: "bg-emerald-500" },
@@ -53,18 +54,10 @@ export function TeamOnboardingDemo() {
   return (
     <div ref={ref} className="relative">
       <div className="rounded-2xl bg-brand-bg-card overflow-hidden shadow-[0_0_0_1px_var(--brand-border),0_2px_8px_rgba(0,0,0,0.08)]">
-        {/* Window chrome */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-brand-border">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
-            <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
-            <div className="w-3 h-3 rounded-full bg-[#28C840]" />
-          </div>
-          <span className="text-xs text-brand-muted font-mono ml-2">Happenstance</span>
-        </div>
+        <WindowChrome title="Happenstance" className="py-3" />
 
         {/* Demo content */}
-        <div className="p-6 min-h-[320px] flex flex-col justify-center">
+        <div className="p-6 h-[360px] flex flex-col justify-center overflow-hidden">
           <AnimatePresence mode="wait">
             {state === "input" && (
               <motion.div
@@ -77,14 +70,14 @@ export function TeamOnboardingDemo() {
               >
                 <p className="text-sm text-brand-muted">Set up your team workspace</p>
                 <div className="flex items-center gap-3">
-                  <div className="flex-1 flex items-center rounded-lg border border-brand-border bg-brand-bg px-4 py-2.5">
+                  <div className="flex-1 flex items-center rounded-xl border border-brand-border bg-brand-bg px-4 py-2.5">
                     <span className="text-brand-muted text-sm">team</span>
                     <span className="text-brand-green font-mono text-sm ml-1">@acme.com</span>
                   </div>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="rounded-lg bg-brand-green px-4 py-2.5 text-sm font-medium text-[#052E16] whitespace-nowrap"
+                    whileTap={{ scale: 0.96 }}
+                    className="rounded-xl bg-brand-green px-4 py-2.5 text-sm font-medium text-[#052E16] whitespace-nowrap"
                   >
                     Set up team
                   </motion.button>
@@ -135,9 +128,6 @@ export function TeamOnboardingDemo() {
                 exit={{ opacity: 0, y: -8 }}
                 className="space-y-2"
               >
-                <p className="text-xs text-brand-muted mb-3">
-                  Found {TEAM_MEMBERS.length} team members
-                </p>
                 {TEAM_MEMBERS.map((member, i) => (
                   <motion.div
                     key={member.name}

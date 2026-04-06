@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useTypingAnimation } from "@/hooks/use-typing-animation";
-import { CreditBadge } from "@/components/shared/credit-badge";
+import { WindowChrome } from "@/components/shared/window-chrome";
+
 
 type Tab = "search" | "research" | "cli" | "mcp";
 
-const TABS: { id: Tab; label: string; credits?: number }[] = [
-  { id: "search", label: "Search API", credits: 2 },
-  { id: "research", label: "Research API", credits: 1 },
+const TABS: { id: Tab; label: string }[] = [
+  { id: "search", label: "Search API" },
+  { id: "research", label: "Research API" },
   { id: "cli", label: "CLI" },
   { id: "mcp", label: "MCP" },
 ];
@@ -166,7 +167,7 @@ function SearchTab({ active }: { active: boolean }) {
   }, [isComplete]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px]">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border h-[300px] overflow-hidden">
       {/* Request */}
       <div className="p-5">
         <div className="flex items-center gap-2 mb-3">
@@ -240,7 +241,7 @@ function SearchTab({ active }: { active: boolean }) {
                         className="h-full rounded-full bg-brand-green"
                       />
                     </div>
-                    <span className="text-xs font-mono text-brand-green">{result.score}</span>
+                    <span className="text-xs font-mono text-brand-green" style={{ fontVariantNumeric: "tabular-nums" }}>{result.score}</span>
                   </div>
                 </motion.div>
               ))}
@@ -266,7 +267,7 @@ function ResearchTab({ active }: { active: boolean }) {
   }, [isComplete]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px]">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border h-[300px] overflow-hidden">
       <div className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs font-mono text-brand-muted uppercase tracking-wider">Request</span>
@@ -356,7 +357,7 @@ function CliTab({ active }: { active: boolean }) {
   }, [isComplete]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px]">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border h-[300px] overflow-hidden">
       <div className="p-5 bg-[#0D0D0D] rounded-bl-xl">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs font-mono text-brand-muted uppercase tracking-wider">Terminal</span>
@@ -395,7 +396,7 @@ function CliTab({ active }: { active: boolean }) {
                   >
                     <span className="w-28 text-brand-text truncate">{r.name}</span>
                     <span className="flex-1 text-brand-muted truncate">{r.title}</span>
-                    <span className="w-12 text-right text-brand-green">{r.score}</span>
+                    <span className="w-12 text-right text-brand-green" style={{ fontVariantNumeric: "tabular-nums" }}>{r.score}</span>
                   </motion.div>
                 ))}
               </div>
@@ -420,7 +421,7 @@ function McpTab({ active }: { active: boolean }) {
   }, [active]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border min-h-[300px] overflow-hidden">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:divide-x divide-brand-border h-[300px] overflow-hidden">
       <div className="p-5 overflow-hidden">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs font-mono text-brand-muted uppercase tracking-wider">Config</span>
@@ -519,30 +520,19 @@ export function ApiPlayground({
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
         className="rounded-2xl bg-brand-bg-card overflow-hidden shadow-[0_0_0_1px_var(--brand-border),0_2px_8px_rgba(0,0,0,0.08)]"
       >
-        {/* Window chrome */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-brand-border">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
-            <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
-            <div className="w-3 h-3 rounded-full bg-[#28C840]" />
-          </div>
-          <span className="text-xs text-brand-muted font-mono ml-2">Happenstance API</span>
-        </div>
+        <WindowChrome title="Happenstance API" className="py-3" />
 
         {/* Tab bar */}
-        <div className="flex border-b border-brand-border px-4 relative">
+        <div className="flex border-b border-brand-border px-2 sm:px-4 relative overflow-x-auto">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabClick(tab.id)}
-              className="relative px-4 py-3 text-sm font-medium transition-colors"
+              className="relative px-3 sm:px-4 py-3 text-sm font-medium transition-colors shrink-0"
             >
               <span className={activeTab === tab.id ? "text-brand-text" : "text-brand-muted hover:text-brand-text"}>
                 {tab.label}
               </span>
-              {tab.credits && (
-                <CreditBadge credits={tab.credits} className="ml-2 scale-90" />
-              )}
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="activeTab"
