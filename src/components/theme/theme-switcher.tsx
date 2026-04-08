@@ -9,9 +9,9 @@ import {
 } from "nucleo-core-outline-24";
 
 const modes = [
+  { value: "system" as const, icon: IconMonitorOutline24, label: "System" },
   { value: "light" as const, icon: IconSunOutline24, label: "Light" },
   { value: "dark" as const, icon: IconMoonOutline24, label: "Dark" },
-  { value: "system" as const, icon: IconMonitorOutline24, label: "System" },
 ];
 
 export function ThemeSwitcher() {
